@@ -1,2 +1,2 @@
-# AdminPortal
-UI for admins
+# UserFrontend
+Contains front-end environment for user-related services
