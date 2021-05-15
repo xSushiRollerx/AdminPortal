@@ -7,6 +7,7 @@ import AppConfig from "./components/hoc/App.config";
 import RestaurantService from "../services/RestaurantService";
 import AddRestaurantLink from "./AddRestaurantLink";
 // "@fortawesome/react-fontawesome": "^0.1.14",
+import CreateRestaurantComponent from "../components/CreateRestaurantComponent";
 
 const DataTable = () => {
     const [comments, setComments] = useState([]);
@@ -22,7 +23,8 @@ const DataTable = () => {
         { name: "Name", field: "name", sortable: true },
         { name: "Average Rating", field: "averageRating", sortable: false },
         { name: "Tags", field: "tags", sortable: true },
-        { name: "City", field: "city", sortable: true }
+        { name: "City", field: "city", sortable: true },
+        {name: "Restaurant Actions"}
     ];
 
     useEffect(() => {
@@ -164,6 +166,20 @@ const DataTable = () => {
                                 <td>{comment.averageRating}</td>
                                 <td>{comment.tags}</td>
                                 <td>{comment.city}</td>
+                                <td>
+                                    <button onClick={() => this.editRestaurant(comment.id)}
+                                            className="btn btn-info">Update
+                                    </button>
+                                    <button style={{margin: "5px"}}
+                                            onClick={() => this.deleteRestaurant(comment.id)}
+                                            className="btn btn-danger"> Delete
+                                    </button>
+                                    <button style={{margin: "5px"}}
+                                            onClick={() => this.viewRestaurant(comment.id)}
+                                            className="btn btn-info"> View
+                                    </button>
+                                </td>
+
                             </tr>
                         ))}
                         </tbody>

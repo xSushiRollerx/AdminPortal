@@ -76,11 +76,11 @@ class CreateRestaurantComponent extends Component {
         //Step 5 To Use one Component for Add and Update
         if (this.state.id === 'add') {
             RestaurantService.createRestaurant(restaurant).then(res => {
-                this.props.history.push('/restaurant');
+                this.props.history.push('/');
             });
         } else {
             RestaurantService.updateRestaurant(restaurant, this.state.id).then(res => {
-                this.props.history.push('/restaurant');
+                this.props.history.push('/');
             });
         }
 
@@ -117,7 +117,7 @@ class CreateRestaurantComponent extends Component {
 
 
     cancel() {
-        this.props.history.push('/restaurant');
+        this.props.history.push('/');
     }
 
     getTitle() {

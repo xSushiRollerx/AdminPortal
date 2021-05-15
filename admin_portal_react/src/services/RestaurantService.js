@@ -8,7 +8,7 @@ class RestaurantService {
         return axios.get(RESTAURANT_API_BASE_URL + "/all/page/" + page);
     }
 
-    createFood(restaurant){
+    createRestaurant(restaurant){
         return axios.post(RESTAURANT_API_BASE_URL, restaurant);
     }
 

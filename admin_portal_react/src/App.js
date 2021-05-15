@@ -42,7 +42,7 @@ function App() {
                         </Switch>
                     </div>
             </Router>
-            <FooterComponent/>
+            {/*<FooterComponent/>*/}
         </div>
 
 
