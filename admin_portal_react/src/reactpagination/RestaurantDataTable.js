@@ -38,7 +38,7 @@ const DataTable = () => {
                     setComments(json);
                 });*/
 
-            RestaurantService.getRestaurant().then(res => res.data)
+            RestaurantService.getRestaurant(0).then(res => res.data)
                 .then((data) => {
                     hideLoader();
                     setComments((comments) => data);

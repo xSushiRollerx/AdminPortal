@@ -4,8 +4,8 @@ const RESTAURANT_API_BASE_URL = 'http://localhost:8080/restaurant';
 
 class RestaurantService {
 
-    getRestaurant(){
-        return axios.get(RESTAURANT_API_BASE_URL);
+    getRestaurant(page){
+        return axios.get(RESTAURANT_API_BASE_URL + "/all/page/" + page);
     }
 
     createFood(restaurant){
