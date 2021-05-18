@@ -48,15 +48,12 @@ const DataTable = () => {
                 });
 
 
-
             // RestaurantService.getRestaurant().then((res) =>
             // {
             //     console.log(typeof res.data)
             //     setComments(res.data)
             //     // this.setState({restaurants: res.data});x
             // });
-
-
 
         };
 

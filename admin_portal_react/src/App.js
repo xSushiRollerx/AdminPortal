@@ -15,6 +15,7 @@ import Login from "./components/AccountComponents/Login";
 import UserInfo from "./components/AccountComponents/UserInfo";
 import UpdateAccount from "./components/AccountComponents/UpdateAccount";
 import Account from "./components/AccountComponents/Account"
+import Restaurants from "./materialUi/src/pages/Employees/Restaurants";
 
 function App() {
     return (
@@ -27,7 +28,9 @@ function App() {
                             <Route path = "/login" exact component = {Login}></Route>
                             <Route path = "/profile" exact component = {UserInfo}></Route>
                             <Route path = "/update" exact component = {UpdateAccount}></Route>
-                            <Route path = "/" exact component = {DataTable}></Route>
+
+                            <Route path = "/" exact component = {Restaurants}></Route>
+                            {/*<Route path = "/" exact component = {DataTable}></Route>*/}
                             {/*<Route path = "/" exact component = {RestaurantsComponents}></Route>*/}
                             <Route path = "/restaurant" component = {RestaurantsComponents}></Route>
                             {/*Step 1 To Use one Component for Add and Update*/}

@@ -6,6 +6,9 @@ class RestaurantService {
 
     getRestaurant(page){
         return axios.get(RESTAURANT_API_BASE_URL + "/all/page/" + page);
+        // let response =  axios.get(RESTAURANT_API_BASE_URL + "/all/page/" + page);
+        // console.log(response);
+        // return response
     }
 
     createRestaurant(restaurant){
