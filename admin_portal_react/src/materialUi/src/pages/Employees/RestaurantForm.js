@@ -23,7 +23,7 @@ const priceCategoryItems = [
 
 ]
 
-const intialFValues = {
+const initialFValues = {
     id: 0,
     name: '',
     averageRating: '',
@@ -52,6 +52,14 @@ export default function RestaurantForm(props) {
         ,[x,y]);*/
 
     const { addOrEdit, recordForEdit } = props
+    // console.log(recordForEdit);
+    // console.log(props.recordForEdit);
+
+//     const validate = (fieldValues = (typeof values === "undefined" ? recordForEdit : values)) => {
+// console.log(typeof values);
+// console.log("values: " + values);
+// console.log(fieldValues);
+// console.log(fieldValues.zipCode.length);
 
     const validate = (fieldValues = values) => {
         let temp = {...errors}
@@ -63,6 +71,8 @@ export default function RestaurantForm(props) {
             temp.streetAddress = fieldValues.streetAddress ? "" : "This field is required."
         if ("zipCode" in fieldValues)
             temp.zipCode = fieldValues.zipCode.length > 4 ? "" : "Minimum 5 numbers required."
+        // console.log("temp.zipCode: " + temp.zipCode);
+        // console.log("fieldValues.zipCode.length " + fieldValues.zipCode.length);
         if ("departmentId" in fieldValues)
             temp.departmentId = fieldValues.departmentId.length != 0 ? "" : "This field is required."
         setErrors({
@@ -80,7 +90,7 @@ export default function RestaurantForm(props) {
         setErrors,
         handleInputChange,
         resetForm
-    } = useForm(intialFValues, true, validate);
+    } = useForm(initialFValues, true, validate);
 
     const handleSubmit = e => {
         e.preventDefault();

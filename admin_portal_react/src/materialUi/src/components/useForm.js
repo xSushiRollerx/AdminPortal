@@ -18,11 +18,18 @@ export function useForm(initialFValues, validateOnChange =false, validate) {
                 [name]: isActiveValue
             })
         } else {
+
+
         setValues({
             ...values,
             [name]: value
         })
     }
+
+        for (let i = 0; i < value.length; i++) {
+            console.log(values[i]);
+        }
+
 
         if(validateOnChange)
             validate({[name]: value})

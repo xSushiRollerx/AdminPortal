@@ -14,6 +14,7 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import Notification from "../../components/controls/Notification";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import RestaurantService from "../../../../services/RestaurantService";
+import RestaurantIcon from '@material-ui/icons/Restaurant';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -52,19 +53,13 @@ export default function Restaurants(props) {
 
 
     const [records, setRecords] = useState([]);
-;
-        // fetch( 'http://localhost:8080/restaurant/all/page/0')
-        // .then(response => response.json()))
-        // .then(data => console.log(data)));
-        // (restaurants === undefined||restaurants === null) ? "" : restaurants);
+
+    // fetch( 'http://localhost:8080/restaurant/all/page/0')
+    // .then(response => response.json()))
+    // .then(data => console.log(data)));
+    // (restaurants === undefined||restaurants === null) ? "" : restaurants);
 
     // console.log(records);
-
-    useEffect(() => {
-        getData()/*.then(R => {return R})*/;
-        // console.log(1);
-        // console.log(records.data);
-    }, [  ]);
 
 
     const [filterFn, setFilterFn] = useState({
@@ -73,9 +68,28 @@ export default function Restaurants(props) {
         }
     });
     const [openPopup, setOpenPopup] = useState(false);
-    const [notify, setNotify] = useState({isOpen :false, message:'', type:''});
+    const [notify, setNotify] = useState({isOpen: false, message: '', type: ''});
     const [confirmDialog, setConfirmDialog] =
-        useState({isOpen:false, title:"", subTitle:""});
+        useState({isOpen: false, title: "", subTitle: ""});
+
+    const [refreshData, setRefreshData] = useState(1);
+
+    // useEffect(() => {
+    //     getData()/
+    // }, [setRefreshData()]);
+
+    useEffect(() => {
+        getData()/*.then(R => {return R})*/;
+        // console.log(1);
+        // console.log(records.data);
+    }, []);
+
+    useEffect(() => {
+        fetch("http://localhost:8080/restaurant/all/page/0")
+              .then(response => response.json())
+              .then(json => setRecords(json));
+    }, [refreshData]);
+
 
     const {
         TblContainer,
@@ -97,22 +111,44 @@ export default function Restaurants(props) {
         })
     }
 
+    let someValue =3;
+
+    const reData = () => {
+        // setRefreshData(()=>{
+        //     return 2 + refreshData;
+        // });
+        // setRefreshData(3);
+        setRefreshData( {
+            ...refreshData,
+            [refreshData]:someValue
+        })
+
+        console.log(refreshData);
+    }
 
     //inserting or Updating records
     const addOrEdit = (employee, resetForm) => {
-        if(employee.id === 0){
+        if (employee.id === 0) {
             console.log(employee);
-            RestaurantService.createRestaurant(employee);}
+            RestaurantService.createRestaurant(employee);
+        }
         // employeeService.insertEmployee(employee);
-        else{
-        employeeService.updateEmployee(employee);}
+        else {
+            RestaurantService.updateRestaurant(employee, employee.id);
+            // employeeService.updateEmployee(employee);}
+        }
         resetForm();
         setRecordForEdit(null);
         setOpenPopup(false);
         // window.location.reload();
         // setRecords(getData());
+
+        reData();
+        console.log(refreshData);
+
+        // setRefreshData(2);
         setNotify({
-            isOpen : true,
+            isOpen: true,
             message: "Submitted Successfully",
             type: "success"
         })
@@ -128,21 +164,23 @@ export default function Restaurants(props) {
             ...confirmDialog,
             isOpen: false
         })
-            employeeService.deleteEmployee(id);
-            setRecords(employeeService.getData());
-            setNotify({
-                isOpen: true,
-                message: "Deleted Successfully",
-                type: "error"
-            })
+        RestaurantService.deleteRestaurant(id);
+        // employeeService.deleteEmployee(id);
+        // setRecords(employeeService.getData);
+        setNotify({
+            isOpen: true,
+            message: "Deleted Successfully",
+            type: "error"
+        })
     }
 
     return (
         <React.Fragment>
             <PageHeader
-                title="New Employee"
-                subTitle="Form design with validation"
-                icon={<PeopleOutlineTwoToneIcon fontSize="large"/>}
+                title="Restaurants"
+                subTitle="Add, Edit, or Delete a Restaurant"
+                icon={<RestaurantIcon fontSize="large"/>}
+                // icon={<PeopleOutlineTwoToneIcon fontSize="large"/>}
             />
             <Paper className={classes.pageContent}>
 
@@ -163,7 +201,10 @@ export default function Restaurants(props) {
                         variant="outlined"
                         startIcon={<AddIcon/>}
                         className={classes.newButton}
-                        onClick={() => {setOpenPopup(true); setRecordForEdit(null); }}
+                        onClick={() => {
+                            setOpenPopup(true);
+                            setRecordForEdit(null);
+                        }}
                     />
                 </Toolbar>
                 <TblContainer>
@@ -179,8 +220,10 @@ export default function Restaurants(props) {
                                     <TableCell>
                                         <Controls.ActionButton
                                             color="primary"
-                                            onClick = {() => {openInPopup(item)}}>
-                                            <EditOutlinedIcon fontSize="small" />
+                                            onClick={() => {
+                                                openInPopup(item)
+                                            }}>
+                                            <EditOutlinedIcon fontSize="small"/>
                                         </Controls.ActionButton>
                                         <Controls.ActionButton
                                             color="secondary"
@@ -192,7 +235,7 @@ export default function Restaurants(props) {
                                                     onConfirm: () => onDelete(item.id)
                                                 })
                                             }}>
-                                            <CloseIcon fontSize="small" />
+                                            <CloseIcon fontSize="small"/>
                                         </Controls.ActionButton>
                                     </TableCell>
                                 </TableRow>
@@ -208,18 +251,18 @@ export default function Restaurants(props) {
                 setOpenPopup={setOpenPopup}
             >
                 <RestaurantForm
-                    recordForEdit = {recordForEdit}
-                addOrEdit = {addOrEdit}
+                    recordForEdit={recordForEdit}
+                    addOrEdit={addOrEdit}
                 />
             </Popup>
             <Notification
-                notify = {notify}
-                setNotify = {setNotify}
-                />
+                notify={notify}
+                setNotify={setNotify}
+            />
             <ConfirmDialog
                 confirmDialog={confirmDialog}
-                setConfirmDialog ={setConfirmDialog}
-                />
+                setConfirmDialog={setConfirmDialog}
+            />
         </React.Fragment>
 
     );

@@ -19,7 +19,7 @@ class RestaurantService {
         return axios.get(RESTAURANT_API_BASE_URL + '/' + restaurantId);
     }
 
-    updateFood(restaurant, restaurantId){
+    updateRestaurant(restaurant, restaurantId){
         return axios.put(RESTAURANT_API_BASE_URL + '/' + restaurantId, restaurant);
     }
 
