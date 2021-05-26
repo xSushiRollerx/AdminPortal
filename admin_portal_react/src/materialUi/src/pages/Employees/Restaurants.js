@@ -15,6 +15,7 @@ import Notification from "../../components/controls/Notification";
 import ConfirmDialog from "../../components/ConfirmDialog";
 import RestaurantService from "../../../../services/RestaurantService";
 import RestaurantIcon from '@material-ui/icons/Restaurant';
+import useStateWithCallback, {useStateWithCallbackInstant} from 'use-state-with-callback';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -35,6 +36,7 @@ const headCells = [
     {id: "averageRating", label: "Average Rating"},
     {id: "tags", label: "Tags"},
     {id: "city", label: "City", /*disableSorting: true*/},
+    {id: "isActive", label: "Is Active"},
     {id: "actions", label: "Actions", disableSorting: true}
 ]
 
@@ -49,9 +51,22 @@ export default function Restaurants(props) {
     }
 
     const classes = useStyles();
+
+
     const [recordForEdit, setRecordForEdit] = useState(null);
 
 
+
+    const getDataTwo = /*async*/ () => {
+        return RestaurantService.getRestaurant(0).then(res => res.data)
+            .then((data) => {
+                setRecords(() => data);
+                console.log("getDataTwo ")
+                // setRecords((records) => data);
+            });
+    }
+
+    //intial Restaurant List holder
     const [records, setRecords] = useState([]);
 
     // fetch( 'http://localhost:8080/restaurant/all/page/0')
@@ -60,6 +75,7 @@ export default function Restaurants(props) {
     // (restaurants === undefined||restaurants === null) ? "" : restaurants);
 
     // console.log(records);
+
 
 
     const [filterFn, setFilterFn] = useState({
@@ -72,23 +88,30 @@ export default function Restaurants(props) {
     const [confirmDialog, setConfirmDialog] =
         useState({isOpen: false, title: "", subTitle: ""});
 
-    const [refreshData, setRefreshData] = useState(1);
+/*    const [refreshData, setRefreshData] = useStateWithCallbackInstant(1,x => {
+        RestaurantService.getRestaurant(0).then(res => res.data)
+            .then((data) => {
+                setRecords(() => data);
+            });
+    })*/
+    // const [refreshData, setRefreshData] = useState(1);
 
     // useEffect(() => {
     //     getData()/
     // }, [setRefreshData()]);
 
+    //intial load of Page******
     useEffect(() => {
         getData()/*.then(R => {return R})*/;
         // console.log(1);
         // console.log(records.data);
     }, []);
 
-    useEffect(() => {
+/*    useEffect(() => {
         fetch("http://localhost:8080/restaurant/all/page/0")
               .then(response => response.json())
               .then(json => setRecords(json));
-    }, [refreshData]);
+    }, [refreshData]);*/
 
 
     const {
@@ -113,18 +136,35 @@ export default function Restaurants(props) {
 
     let someValue =3;
 
+    // getDataTwo()/*.then(r =>setRecords(r.data) )*/;
     const reData = () => {
         // setRefreshData(()=>{
         //     return 2 + refreshData;
         // });
         // setRefreshData(3);
-        setRefreshData( {
-            ...refreshData,
-            [refreshData]:someValue
-        })
+        // setRefreshData( {
+        //     ...refreshData,
+        //     [refreshData]:someValue
+        // })
+        // console.log("before: " + refreshData)
 
-        console.log(refreshData);
+        // setRefreshData({
+        //     refreshData: 3
+        // }, console.log('after setState' + refreshData))
+
+
+        // this.setState({
+        //     loading: !this.state.loading
+        // }, console.log('after setState', this.state.loading))
+
+
+        // console.log(refreshData);
     }
+
+    const getDataThree = () => {
+        return RestaurantService.getRestaurant(0);
+    }
+
 
     //inserting or Updating records
     const addOrEdit = (employee, resetForm) => {
@@ -138,15 +178,42 @@ export default function Restaurants(props) {
             // employeeService.updateEmployee(employee);}
         }
         resetForm();
+
+        getDataTwo().then(result => {
+            if(result) {
+                setRecords(result.data);
+                console.log("getTwo");
+            }
+        }).catch((error) =>{
+            console.log(error);
+        })
+
+
+
+        getDataThree().then((result) => {
+            if(result.status >= 200 && result.status <= 300){
+                setRecords(result.data);
+                console.log("getThree " + result.status);
+            }
+        })
+
+        getDataThree().catch((error) => {
+            console.log(error);
+        })
+
+
+
         setRecordForEdit(null);
         setOpenPopup(false);
         // window.location.reload();
         // setRecords(getData());
 
-        reData();
-        console.log(refreshData);
+        // reData();
+        // console.log(refreshData);
 
-        // setRefreshData(2);
+/*        setRefreshData(2);
+        console.log(refreshData);*/
+
         setNotify({
             isOpen: true,
             message: "Submitted Successfully",
@@ -217,6 +284,7 @@ export default function Restaurants(props) {
                                     <TableCell>{item.averageRating}</TableCell>
                                     <TableCell>{item.tags}</TableCell>
                                     <TableCell>{item.city}</TableCell>
+                                    <TableCell>{item.isActive ? "Active": "Inactive"}</TableCell>
                                     <TableCell>
                                         <Controls.ActionButton
                                             color="primary"

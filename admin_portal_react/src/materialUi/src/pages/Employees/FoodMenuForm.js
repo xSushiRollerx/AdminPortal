@@ -12,7 +12,8 @@ import {
 import {useForm, Form} from "../../components/useForm";
 import Controls from "../../components/controls/Controls";
 import * as employeeService from "../../services/employeeService";
-
+import SingleLineGridList from "../../components/GridSingleLine";
+import AlignItemsList from "../../components/AlignList";
 
 const priceCategoryItems = [
     {id: "1", title: "1"},
@@ -38,41 +39,19 @@ const initialFValues = {
 
 
 export default function RestaurantForm(props) {
-/*    //destructured Array declaration
-        const [x, setx] = useState(5);
-        setx(6);
 
-        let y = x +3;
-
-    /!*    the first param the func, will run when
-        ever the value of one of the 2nd param
-        array memebers changes*!/
-        useEffect(() => {
-        }
-        ,[x,y]);*/
 
     const { addOrEdit, recordForEdit } = props
-    // console.log(recordForEdit);
-    // console.log(props.recordForEdit);
 
-    // const validate = (fieldValues = (values.id !== 0 ? recordForEdit : values)) => {
-// console.log(typeof values);
-// console.log("values: " + values);
-// console.log(fieldValues);
-// console.log(fieldValues.zipCode.length);
 
     const validate = (fieldValues = values) => {
         let temp = {...errors}
         if ("name" in fieldValues)
             temp.name = fieldValues.name ? "" : "This field is required."
-        // if ("email" in fieldValues)
-        //     temp.email = (/$^|.+@.+..+/).test(fieldValues.email) ? "" : "Email is not valid."
         if ("streetAddress" in fieldValues)
             temp.streetAddress = fieldValues.streetAddress ? "" : "This field is required."
         if ("zipCode" in fieldValues)
             temp.zipCode = fieldValues.zipCode.length > 4 ? "" : "Minimum 5 numbers required."
-        // console.log("temp.zipCode: " + temp.zipCode);
-        // console.log("fieldValues.zipCode.length " + fieldValues.zipCode.length);
         if ("departmentId" in fieldValues)
             temp.departmentId = fieldValues.departmentId.length != 0 ? "" : "This field is required."
         setErrors({
@@ -96,12 +75,9 @@ export default function RestaurantForm(props) {
     const handleSubmit = e => {
         e.preventDefault();
         if (validate()) {
-            //insert data call to backend simulation
             addOrEdit(values, resetForm);
-            // employeeService.insertEmployee(values);
-            // resetForm();
+
         }
-        // window.alert("testing...");
     }
 
     useEffect(() => {
@@ -179,6 +155,11 @@ export default function RestaurantForm(props) {
                         onChange={handleInputChange}
                         items={priceCategoryItems}
                     />*/}
+
+                    {/*<SingleLineGridList />*/}
+
+                    <AlignItemsList/>
+
                     <Controls.Select
                         name="priceCategory"
                         label="Price Category"

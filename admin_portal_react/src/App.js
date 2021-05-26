@@ -16,6 +16,7 @@ import UserInfo from "./components/AccountComponents/UserInfo";
 import UpdateAccount from "./components/AccountComponents/UpdateAccount";
 import Account from "./components/AccountComponents/Account"
 import Restaurants from "./materialUi/src/pages/Employees/Restaurants";
+import FoodMenuForm from "./materialUi/src/pages/Employees/FoodMenuForm"
 
 function App() {
     return (
@@ -30,6 +31,7 @@ function App() {
                             <Route path = "/update" exact component = {UpdateAccount}></Route>
 
                             <Route path = "/" exact component = {Restaurants}></Route>
+                            <Route path = "/food" exact component = {FoodMenuForm}></Route>
                             {/*<Route path = "/" exact component = {DataTable}></Route>*/}
                             {/*<Route path = "/" exact component = {RestaurantsComponents}></Route>*/}
                             <Route path = "/restaurant" component = {RestaurantsComponents}></Route>
@@ -38,7 +40,7 @@ function App() {
                             <Route path = "/view-restaurant/:id" component = {ViewRestaurantComponent}></Route>
                             {/*<Route path = "/update-restaurant/:id" component = {UpdateRestaurant}></Route>*/}
                             {/*<Route path = "/" exact component = {FoodComponents}></Route>*/}
-                            <Route path = "/food" component = {FoodComponents}></Route>
+                            {/*<Route path = "/food" component = {FoodComponents}></Route>*/}
                             <Route path = "/add-food/:id" component = {CreateFoodComponent}></Route>
                             <Route path = "/view-food/:id" component = {ViewFoodComponent}></Route>
                             <Route path = "/account" component = {Account}></Route>
