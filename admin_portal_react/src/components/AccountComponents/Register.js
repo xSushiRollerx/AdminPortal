@@ -41,7 +41,7 @@ export default class Register extends Component {
             validations = false;
         }
         else if (user.password.length <= 6 || user.password.length >= 20) {
-            document.getElementById("pwValid").textContent = 'Password length should be between 6 and 20 exclusive'
+            document.getElementById("pwValid").textContent = 'Password length should be between 6 and 20 characters long'
             validations = false;
         }
         else if (user.password!==passwordConfirm) {
@@ -88,6 +88,10 @@ export default class Register extends Component {
         }
         else if (!/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(user.email.trim())){
             document.getElementById("eValid").textContent = 'Email format unknown';
+            validations = false;
+        }
+        else if (!/@smoothstack.com/.test(user.email.trim().toLowerCase())){
+            document.getElementById("eValid").textContent = 'Email is not recognized as having';
             validations = false;
         }
         else {
