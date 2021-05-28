@@ -8,6 +8,18 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import RestaurantService from "../../../services/RestaurantService";
+import {
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Grid,
+    Radio,
+    RadioGroup, TableCell,
+    TextField
+} from "@material-ui/core";
+import Controls from "./controls/Controls";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,7 +59,12 @@ export default function AlignItemsList() {
             {records.map((restaurant) => (
                 <div>
                     <h3>{restaurant.name}</h3>
-                <List className={classes.root}>
+                    <hr/>
+                    <Grid>
+                    {restaurant.menu.map((item) => (
+                        <div>
+                    <p>{item.category}</p>
+                        <List className={classes.root}>
             <ListItem alignItems="flex-start">
                 <ListItemAvatar>
                     <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
@@ -56,7 +73,7 @@ export default function AlignItemsList() {
                     primary={restaurant.name}
                     secondary={
                         <React.Fragment>
-                            {restaurant.menu.map((item) => (
+                            {/*{restaurant.menu.map((item) => (*/}
                             <Typography
                                 component="span"
                                 variant="body2"
@@ -65,17 +82,39 @@ export default function AlignItemsList() {
                             >
 
 
-
                                 {item.name}
                                 {item.summary}
                             </Typography>
-                                    ))}
+                                    {/*// ))}*/}
                         </React.Fragment>
                     }
                 />
 
+
+                <Controls.ActionButton
+                    color="primary"
+                    onClick={() => {
+                        // openInPopup(item)
+                    }}>
+                    <EditOutlinedIcon fontSize="small"/>
+                </Controls.ActionButton>
+                <Controls.ActionButton
+                    color="secondary"
+                    onClick={() => {
+                        // setConfirmDialog({
+                        //     isOpen: true,
+                        //     title: 'Are you wish to delete this record?',
+                        //     subTitle: "You can not undo this operation",
+                        //     onConfirm: () => onDelete(item.id)
+                        // })
+                    }}>
+                    <CloseIcon fontSize="small"/>
+                </Controls.ActionButton>
+
+
+
             </ListItem>
-            <Divider variant="inset" component="li" />
+            {/*<Divider variant="inset" component="li" />*/}
 {/*            <ListItem alignItems="flex-start">
                 <ListItemAvatar>
                     <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
@@ -120,6 +159,10 @@ export default function AlignItemsList() {
                 />
             </ListItem>*/}
         </List>
+                        </div>
+                    ))}
+                    </Grid>
+
                 </div>
             ))}
 

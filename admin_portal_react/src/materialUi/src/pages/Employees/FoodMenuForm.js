@@ -94,7 +94,11 @@ export default function RestaurantForm(props) {
         <Form onSubmit={handleSubmit}>
             <Grid container>
                 <Grid item xs={6}>
-                    <Controls.Input
+
+                    <AlignItemsList/>
+
+
+{/*                    <Controls.Input
                         label="Name"
                         name="name"
                         value={values.name}
@@ -145,7 +149,7 @@ export default function RestaurantForm(props) {
                         onChange={handleInputChange}
                         error={errors.zipCode}
 
-                    />
+                    />*/}
                 </Grid>
                 <Grid item xs={6}>
 {/*                    <Controls.RadioGroup
