@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const AUTH_API_URL = 'http://localhost:8080/authenticate';
+const AUTH_API_URL = 'http://localhost:8090/authenticate_admin';
 
 class AuthenticationService {
 

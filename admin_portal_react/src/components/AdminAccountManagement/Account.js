@@ -1,5 +1,5 @@
-import { Button } from 'bootstrap'
 import React, { Component } from 'react'
+import UserService from '../../services/UserService'
 
 export default class Account extends Component {
     constructor(props) {
@@ -8,11 +8,25 @@ export default class Account extends Component {
             user: {},
             user_loaded: false,
         }
+        this.submit = this.submit.bind(this);
+    }
+    submit = (e) => {
+        e.preventDefault();
+        try{
+            let userid = document.getElementById("userid").value;
+            UserService.readUser(userid).then(res => {
+              this.setState({user: res.data});
+              this.setState({user_loaded: true});
+            }).catch((error)=>{
+              console.log(error);
+              this.setState({user_loaded: false});
+            });
+          }
+          catch(e){
+            console.log(e);
+          }
     }
     render() {
-        function submit(){
-            
-        }
         return (
             <div>
                 <h1>Account Management</h1>
@@ -24,7 +38,7 @@ export default class Account extends Component {
                     placeholder='username'
                     />
                     <button className="btn btn-success" 
-                    onClick={submit}>
+                    onClick={this.submit}>
                         Submit
                     </button>
                 </form>
@@ -41,10 +55,10 @@ export default class Account extends Component {
                 <h2>Phone:</h2>
                 <p1 id='phone'>{this.state.user.phone}</p1>
                 <div>
-                    <button onClick={()=>{this.props.history.push('update');}}>Update your Account</button>
                 </div>
                 <div>
                     <a href="update_role">Update user role</a>
+                    <br/>
                     <a href="update_role">Update user fields</a>
                 </div>
                 </div>
