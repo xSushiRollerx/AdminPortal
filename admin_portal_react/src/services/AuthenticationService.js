@@ -4,7 +4,7 @@ const AUTH_API_URL = 'http://localhost:8090/authenticate_admin';
 
 class AuthenticationService {
 
-    login(authrequest){
+    post(authrequest){
         return axios.post(AUTH_API_URL, authrequest)
     }
 }
