@@ -14,17 +14,42 @@ import DataTable from "./reactpagination/RestaurantDataTable.js";
 import Login from "./components/AccountComponents/Login";
 import UserInfo from "./components/AccountComponents/UserInfo";
 import UpdateAccount from "./components/AccountComponents/UpdateAccount";
-import Account from "./components/AccountComponents/Account"
+import Account from "./components/AdminAccountManagement/Account"
 import Restaurants from "./materialUi/src/pages/Employees/Restaurants";
 import FoodMenuForm from "./materialUi/src/pages/Employees/FoodMenuForm"
+import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: 100,
+    marginRight: 100,
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+  },
+}));
 
 function App() {
+    const classes = useStyles();
     return (
         <div>
             
             <Router>
                     <HeaderComponent/>
-                    <div className="container">
+                    <div className={clsx(classes.content)}>
+                    <div className={classes.drawerHeader} />
                         <Switch>
                             <Route path = "/login" exact component = {Login}></Route>
                             <Route path = "/profile" exact component = {UserInfo}></Route>
