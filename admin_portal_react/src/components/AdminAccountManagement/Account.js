@@ -1,5 +1,9 @@
-import React, { Component } from 'react'
-import UserService from '../../services/UserService'
+import React, { Component, useState } from 'react';
+import UserService from '../../services/UserService';
+import UpdateAccountRole from './UpdateAccountRole';
+import Button from 'react-bootstrap/Button';
+import Collapse from 'react-bootstrap/Collapse';
+import UpdateAccountFields from './UpdateAccountFields';
 
 export default class Account extends Component {
     constructor(props) {
@@ -26,7 +30,42 @@ export default class Account extends Component {
             console.log(e);
           }
     }
+    
     render() {
+        // function UpdateRole() {
+        //     const [open, setOpen] = useState(false);
+        //     return (
+        //       <>
+        //         <Button
+        //           onClick={() => setOpen(!open)}
+        //           aria-controls="example-collapse-text"
+        //           aria-expanded={open}
+        //         >
+        //           Update User Role
+        //         </Button>
+        //         <Collapse in={open}>
+        //           <UpdateAccountRole name={this.state.user.username}/>
+        //         </Collapse>
+        //       </>
+        //     );
+        //   }
+        //   function UpdateAccount() {
+        //     const [open, setOpen] = useState(false);
+        //     return (
+        //       <>
+        //         <Button
+        //           onClick={() => setOpen(!open)}
+        //           aria-controls="example-collapse-text"
+        //           aria-expanded={open}
+        //         >
+        //           Update User Role
+        //         </Button>
+        //         <Collapse in={open}>
+        //         {this.state.user_loaded?(<UpdateAccountRole name={this.state.user.username}/>):null}
+        //         </Collapse>
+        //       </>
+        //     );
+        //   }
         return (
             <div>
                 <h1>Account Management</h1>
@@ -57,9 +96,9 @@ export default class Account extends Component {
                 <div>
                 </div>
                 <div>
-                    <a href="update_role">Update user role</a>
+                    <UpdateAccountRole name={this.state.user.username}/>
+                    <UpdateAccountFields name={this.state.user.username}/>
                     <br/>
-                    <a href="update_role">Update user fields</a>
                 </div>
                 </div>
                 ):null}

@@ -1,19 +1,17 @@
-import logo from './logo.svg';
 import './App.css';
 import HeaderComponent from "./components/HeaderComponent";
-import FooterComponent from "./components/FooterComponent";
+// import FooterComponent from "./components/FooterComponent";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import UpdateRestaurant from "./components/UpdateRestaurant";
+// import UpdateRestaurant from "./components/UpdateRestaurant";
 import RestaurantsComponents from "./components/RestaurantsComponents";
 import CreateRestaurantComponent from "./components/CreateRestaurantComponent";
 import ViewRestaurantComponent from "./components/ViewRestaurantComponent";
-import FoodComponents from "./components/FoodComponents";
+// import FoodComponents from "./components/FoodComponents";
 import CreateFoodComponent from "./components/CreateFoodComponent";
 import ViewFoodComponent from "./components/ViewFoodComponent";
-import DataTable from "./reactpagination/RestaurantDataTable.js";
+// import DataTable from "./reactpagination/RestaurantDataTable.js";
 import Login from "./components/AccountComponents/Login";
 import UserInfo from "./components/AccountComponents/UserInfo";
-import UpdateAccount from "./components/AccountComponents/UpdateAccount";
 import Account from "./components/AdminAccountManagement/Account"
 import Restaurants from "./materialUi/src/pages/Employees/Restaurants";
 import FoodMenuForm from "./materialUi/src/pages/Employees/FoodMenuForm"
@@ -53,8 +51,6 @@ function App() {
                         <Switch>
                             <Route path = "/login" exact component = {Login}></Route>
                             <Route path = "/profile" exact component = {UserInfo}></Route>
-                            <Route path = "/update" exact component = {UpdateAccount}></Route>
-
                             <Route path = "/" exact component = {Restaurants}></Route>
                             <Route path = "/food" exact component = {FoodMenuForm}></Route>
                             {/*<Route path = "/" exact component = {DataTable}></Route>*/}

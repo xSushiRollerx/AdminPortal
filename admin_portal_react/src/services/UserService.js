@@ -19,7 +19,11 @@ class UserService {
     }
 
     updateUserRole(username, role){
-        return axios.put(USER_API_BASE_URL_ADMIN + '/user/' + username +'/role', role);
+        return axios.put(USER_API_BASE_URL_ADMIN + '/user/' + username +'/role', role, {
+            headers: {
+                "content-type": "application/json"
+            }
+        });
     }
 
     get(){
