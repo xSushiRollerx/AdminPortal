@@ -6,7 +6,11 @@ const USER_API_BASE_URL_ADMIN = 'http://localhost:8080/admins';
 
 class UserService {
 
-    update(user){
+    post(user){
+        return axios.post(USER_API_BASE_URL + '/user', user);
+    }
+
+    put(user){
         return axios.put(USER_API_BASE_URL + '/user/' + jwt_decode(localStorage.getItem("jwt")).sub, user);
     }
 
@@ -15,10 +19,14 @@ class UserService {
     }
 
     updateUserRole(username, role){
-        return axios.put(USER_API_BASE_URL_ADMIN + '/user/' + username +'/role', role);
+        return axios.put(USER_API_BASE_URL_ADMIN + '/user/' + username +'/role', role, {
+            headers: {
+                "content-type": "application/json"
+            }
+        });
     }
 
-    read(){
+    get(){
         return axios.get(USER_API_BASE_URL + '/user/' + jwt_decode(localStorage.getItem("jwt")).sub);
     }
 

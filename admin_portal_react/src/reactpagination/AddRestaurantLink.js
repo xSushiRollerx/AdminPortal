@@ -11,9 +11,9 @@ function AddRestaurantLink() {
     // Get the router object
     const router = useRouter();
     // Get value from query string (?postId=123) or route param (/:postId)
-    console.log(router.query.postId);
+    // console.log(router.query.postId);
     // Get current pathname
-    console.log(router.pathname);
+    // console.log(router.pathname);
     // Navigate with with router.push()
     return <button style={{
         color: "white", backgroundColor: "#333",height:"30px" ,float:"left"
