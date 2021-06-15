@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+     environment {
+        AWS_SERVICE = "sushibtye-portal-administrator"
+    }
+
+
     stages {
         stage('Build') {
             steps {
@@ -28,7 +33,7 @@ pipeline {
             steps {
                 echo "S3 Build...."
                 echo "Sync..."
-                sh "aws s3 sync build/ s3://sushibtye-portal-administrator"
+                sh "aws s3 sync build/ s3://${AWS_SERVICE}"
             }
         }
 //         stage("Deploy") {
