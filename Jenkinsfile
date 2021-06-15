@@ -28,7 +28,7 @@ pipeline {
             steps {
                 echo "S3 Build...."
                 echo "Sync..."
-                sh "aws s3 sync build/ s3://sushibyte-portal-administrator"
+                sh "aws s3 sync build/ s3://sushibtye-portal-administrator"
             }
         }
 //         stage("Deploy") {
