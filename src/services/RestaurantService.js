@@ -1,28 +1,30 @@
+
 import axios from "axios";
 
-const RESTAURANT_API_BASE_URL = 'http://localhost:8080/restaurant';
+const RESTAURANT_SERVICE_BASE_URL = 'http://localhost:8040';
 
-class RestaurantService {
+const RestaurantService = {
 
-    getRestaurant(){
-        return axios.get(RESTAURANT_API_BASE_URL);
-    }
+    getRestaurant: async function (id) {
+        return axios.get(RESTAURANT_SERVICE_BASE_URL + "/restaurant/" + id);
+    },
 
-    createFood(restaurant){
-        return axios.post(RESTAURANT_API_BASE_URL, restaurant);
-    }
+    getAllRestaurants: async function(page, pageSize, priceCategories, ratings, sort, keywords) {
+        try {
+            if (keywords.trim() === "") {
+                let response = axios.get(RESTAURANT_SERVICE_BASE_URL + "/restaurants/all/" + page + "?pageSize=" + pageSize + "&priceCategories=" + encodeURI(priceCategories)
+                    + "&rating=" + ratings + "&sort=" + sort);
+                return response
+            } else {
+                let response = axios.get(RESTAURANT_SERVICE_BASE_URL + "/restaurants/" + page + "?pageSize=" + pageSize + "&priceCategories=" + encodeURI(priceCategories)
+                    + "&rating=" + ratings + "&sort=" + sort + "&keywords=" + keywords.trim().replace(/ /g, ","));
+                return response;
+            }
+        } catch (err) {
 
-    getRestaurantById(restaurantId){
-        return axios.get(RESTAURANT_API_BASE_URL + '/' + restaurantId);
-    }
-
-    updateFood(restaurant, restaurantId){
-        return axios.put(RESTAURANT_API_BASE_URL + '/' + restaurantId, restaurant);
-    }
-
-    deleteRestaurant(restaurantId){
-        return axios.delete(RESTAURANT_API_BASE_URL + '/' + restaurantId);
+            return { data: "Error", status: 500 };
+        }
     }
 }
 
-export default new RestaurantService()
+export default RestaurantService;
