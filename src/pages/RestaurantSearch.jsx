@@ -210,6 +210,15 @@ export default function RestaurantSearch(props) {
         setPage(0);
     }
 
+    const clearInactive = async () => {
+        try {
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, ratings, sort, keywords);
+        } catch {
+            setStatus(500)
+        }
+        setInactive(false);
+        setPage(0);
+    }
     useEffect(async () => {
         try {
             let res = await RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "");
@@ -302,7 +311,7 @@ export default function RestaurantSearch(props) {
                         <Grid className={style.filter} item xs={3}>
                             <SearchFilter mid={mid} cheap={cheap} fine={fine} high={high} ratings={ratings} handleChange={handlePrices}
                                 handleRatings={handleRatingsChange} clearPrices={clearPrices} address={address} addressChange={handleAddressChange}
-                                inactive={inactive} showInactive={handleInactiveChange}
+                                inactive={inactive} showInactive={handleInactiveChange} clearInactive={clearInactive}
                             />
                         </Grid>
                         <Grid item xs={9}>

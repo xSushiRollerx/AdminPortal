@@ -121,8 +121,8 @@ export default function SearchFilter(props) {
                     <Grid item>
                         <Grid container direction="row" justify="space-between" alignItems="center">
                             <h5>Status</h5>
-                            <Checkbox color="black" inputProps={{ 'data-testid': 'clearPricesBox' }} icon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />}
-                                checkedIcon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />} onChange={props.clearPrices} name="clear-inactive-filter" />
+                            <Checkbox color="black" inputProps={{ 'data-testid': 'clearInactiveBox' }} icon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />}
+                                checkedIcon={<ClearIcon fontSize="small" style={{ margin: "0px" }} />} onChange={props.clearInactive} name="clear-inactive-filter" />
                         </Grid>
                     </Grid>
                     <FormControl>
