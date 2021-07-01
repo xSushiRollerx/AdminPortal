@@ -63,6 +63,7 @@ export default function RestaurantSearch(props) {
         mid: false,
         fine: false,
     });
+    const [inactive, setInactive] = useState(false);
     const [ratings, setRatings] = useState(0);
     
     //for other parts of app to use so they don't have to convert booleans string. prob should have been function;
@@ -108,7 +109,7 @@ export default function RestaurantSearch(props) {
         }
 
         try {
-            let res = await RestaurantService.getAllRestaurants(0, pageSize, query.substring(2), ratings, sort, keywords).then(res => response = res);
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, query.substring(2), ratings, sort, keywords);
             setStatus(res.status);
             console.log(res);
             setRows(res.data);
@@ -127,7 +128,7 @@ export default function RestaurantSearch(props) {
     };
     const clearPrices = async () => {
         try {
-            let res = await RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", ratings, sort, keywords).then(res => response = res)
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", ratings, sort, keywords);
             setStatus(res.status);
             console.log(res);
             setRows(res.data);
@@ -146,7 +147,7 @@ export default function RestaurantSearch(props) {
     const handleRatingsChange = async (event) => {
         console.log(event.target.value);
         try {
-            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, event.target.value, sort, keywords).then(res => response = res);
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, event.target.value, sort, keywords);
             setStatus(res.status);
             console.log(res);
             setRows(res.data);
@@ -158,7 +159,7 @@ export default function RestaurantSearch(props) {
     const handleSort = async (event) => {
         console.log("Handle Sort: " + event.target.value);
         try {
-            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, ratings, event.target.value, keywords).then(res => response = res);
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, ratings, event.target.value, keywords);
             setRows(res.data);
             setStatus(res.status);
         } catch (error) {
@@ -169,7 +170,7 @@ export default function RestaurantSearch(props) {
     };
     const handleChangePage = async (newPage) => {
         try {
-            let res = await RestaurantService.getAllRestaurants(newPage, pageSize, priceCategories, ratings, sort, keywords).then(res => response = res);
+            let res = await RestaurantService.getAllRestaurants(newPage, pageSize, priceCategories, ratings, sort, keywords);
             setStatus(res.status);
             console.log(res);
             setRows(res.data);
@@ -199,6 +200,16 @@ export default function RestaurantSearch(props) {
             localStorage.setItem('dropOffAddress', JSON.stringify({ streetAddress: temp[0], city: temp[1], state: temp[2], zipCode: null}));
         }
     }
+    const handleInactiveChange = async () => {
+        try {
+            let res = await RestaurantService.getAllInactiveRestaurants(0, pageSize, priceCategories, ratings, sort, keywords);
+        } catch {
+            setStatus(500)
+        }
+        setInactive(!inactive);
+        setPage(0);
+    }
+
     useEffect(async () => {
         try {
             let res = await RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "");
@@ -290,7 +301,9 @@ export default function RestaurantSearch(props) {
                     <Grid direction="row" container xs={12} spacing={0}>
                         <Grid className={style.filter} item xs={3}>
                             <SearchFilter mid={mid} cheap={cheap} fine={fine} high={high} ratings={ratings} handleChange={handlePrices}
-                                handleRatings={handleRatingsChange} clearPrices={clearPrices} address={address} addressChange={handleAddressChange}/>
+                                handleRatings={handleRatingsChange} clearPrices={clearPrices} address={address} addressChange={handleAddressChange}
+                                inactive={inactive} showInactive={handleInactiveChange}
+                            />
                         </Grid>
                         <Grid item xs={9}>
                             <Grid container direction="column" alignItems="stretch" justify="flex-start">
