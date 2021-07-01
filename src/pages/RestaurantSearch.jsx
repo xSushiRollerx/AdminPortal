@@ -13,6 +13,7 @@ import RestaurantTablePagination from '../components/RestaurantSearch/Restaurant
 import RestaurantService from './../services/RestaurantService';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
 import { useState, useEffect } from 'react';
 
 
@@ -269,6 +270,7 @@ export default function RestaurantSearch(props) {
 
     return (
         <Grid container direction="column" inputProps={{ 'data-testid': 'SearchPage' }}>
+            
             <Grid item xs={12}>
                 <Grid container alignItems="center" spacing={3}>
                     <Grid item xs={10}>
@@ -286,23 +288,34 @@ export default function RestaurantSearch(props) {
                         </FormControl>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} >
-                    <Grid direction="row" container xs={12} spacing={0} justify="center">
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
-                            colSpan={3}
-                            count={rows.length > 0 ? rows[0].resultSize : 0}
-                            rowsPerPage={pageSize}
-                            page={page}
-                            SelectProps={{
-                                inputProps: {'aria-label': 'rows per page', 'data-testid': 'rowsSelect'},
-                                native: true,
-                            }}
-                            onChangePage={handleChangePage}
-                            onChangeRowsPerPage={handleChangeRowsPerPage}
-                            ActionsComponent={RestaurantTablePagination}
-                            className={style.pagination}
-                        />
+                <Grid item>
+                    <Grid container direction="row" alignItems="center" justify="space-between">
+                        <Grid item xs={8} >
+                            <Grid direction="row" container xs={12} spacing={0} justify="center">
+                                <TablePagination
+                                    rowsPerPageOptions={[5, 10, 25]}
+                                    colSpan={3}
+                                    count={rows.length > 0 ? rows[0].resultSize : 0}
+                                    rowsPerPage={pageSize}
+                                    page={page}
+                                    SelectProps={{
+                                        inputProps: { 'aria-label': 'rows per page', 'data-testid': 'rowsSelect' },
+                                        native: true,
+                                    }}
+                                    onChangePage={handleChangePage}
+                                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                                    ActionsComponent={RestaurantTablePagination}
+                                    className={style.pagination}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Grid container direction="row" justify="flex-end">
+                                 <Button variant="contained" color="primary" disableElevation>
+                                    Add Restaurant
+                                </Button>
+                            </Grid>    
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Divider orientation="horizontal" flexItem className={style.divider} />
