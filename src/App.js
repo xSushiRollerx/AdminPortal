@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import clsx from 'clsx';
 import './App.css';
 import RestaurantSearch from './pages/RestaurantSearch';
+import RestaurantProfile from './pages/RestaurantProfile';
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -37,7 +38,8 @@ function App() {
                         <div className={classes.drawerHeader} />
                         <HeaderComponent />
                         <Switch>
-                        <Route path="/restaurants" exact component={RestaurantSearch}></Route>
+                            <Route path="/restaurants" exact component={RestaurantSearch}></Route>
+                            <Route path="/restaurant/:id" exact component={RestaurantProfile}></Route>
                         </Switch>
                         </div>
                     </div>
