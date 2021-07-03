@@ -12,6 +12,7 @@ import Rating from '@material-ui/lab/Rating';
 import ClearIcon from '@material-ui/icons/Clear';
 import EditIcon from '@material-ui/icons/Edit';
 import DeliveryAddress from './DeliveryAddress';
+
 import { useState } from 'react';
 
 const useStyles = makeStyles({
@@ -62,8 +63,8 @@ export default function SearchFilter(props) {
                         checkedIcon={<EditIcon fontSize="small" style={{ margin: "0px" }} />} onChange={() => setOpenAddress(true)} name="clear-ratings-filter" />
                 </Grid>
             </Grid>
-            <p className={style.p}>{props.address.streetAddress}</p>
-            <p className={style.p}>{props.address.city}, {props.address.state}</p>
+            <p className={style.p}>{props.address.streetAddress === null | props.address.streetAddress === undefined  ? "Everywhere" : props.address.streetAddress}</p>
+            <p className={style.p}>{props.address.streetAddress === null | props.address.streetAddress === undefined ? "" : props.address.city+ ", " + props.address.state}</p>
             <p className={style.p}>{props.address.zipCode}</p>
             <Divider orientation="horizontal" flexItem className={style.divider} />
             <Grid item xs={12}>

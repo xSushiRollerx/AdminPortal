@@ -14,6 +14,7 @@ import RestaurantService from './../services/RestaurantService';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useState, useEffect } from 'react';
 
 
@@ -49,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     }
 
 }));
-let response = {};
+
 export default function RestaurantSearch(props) {
     const style = useStyles();
     const [sort, setSort] = useState('default');
@@ -66,6 +67,7 @@ export default function RestaurantSearch(props) {
     });
     const [inactive, setInactive] = useState(false);
     const [ratings, setRatings] = useState(0);
+    const [autoComplete, setAutoComplete] = useState([]);
     
     //for other parts of app to use so they don't have to convert booleans string. prob should have been function;
     const [priceCategories, setPriceCategories] = useState("1, 2, 3, 4");
@@ -204,13 +206,23 @@ export default function RestaurantSearch(props) {
     const handleInactiveChange = async () => {
         try {
             let res = await RestaurantService.getAllInactiveRestaurants(0, pageSize, priceCategories, ratings, sort, keywords);
+            setStatus(res.status);
+            setRows(res.data);
         } catch {
             setStatus(500)
         }
         setInactive(!inactive);
         setPage(0);
     }
-
+    const handleSearchBarChange = async (event) => {
+        try {
+            console.log("handlesearchhappening")
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, ratings, sort, event.target.value);
+            setAutoComplete(res.data);
+        } catch {
+            setAutoComplete([{name: 'Something Went Wrong'}]);
+        }
+    }
     const clearInactive = async () => {
         try {
             let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, ratings, sort, keywords);
@@ -231,13 +243,13 @@ export default function RestaurantSearch(props) {
         
         
         //load event listener for when user hits enter
-        window.addEventListener('keyup', (event) => {
+        window.addEventListener('keyup', async (event) => {
             if (event.keyCode === 13) {
                 console.log("key event fired");
                 event.preventDefault();
                 console.log(document.getElementById("searchBar").value);
                 try {
-                    let res = RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", 0, "relevance", (document.getElementById("searchBar") !== null ? document.getElementById("searchBar").value : ""))
+                    let res = await RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", 0, "relevance", (document.getElementById("searchBar") !== null ? document.getElementById("searchBar").value : ""))
                     setStatus(res.status);
                     console.log(res);
                     setRows(res.data);
@@ -267,25 +279,22 @@ export default function RestaurantSearch(props) {
          </div>
         );
     }
-
+    console.log(autoComplete);
     return (
         <Grid container direction="column" inputProps={{ 'data-testid': 'SearchPage' }}>
             
             <Grid item xs={12}>
                 <Grid container alignItems="center" spacing={3}>
-                    <Grid item xs={10}>
-                        < TextField className={style.search} placeholder="Search Restaurants" variant="outlined" inputProps={{ 'data-testid': 'searchBar' }}
-                            InputLabelProps={{ shrink: false, }} size="small" color="black" xs={12} id="searchBar" defaultValue={keywords}/>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <FormControl className={style.sortDisplay}>
-                            <Select value={sort} onChange={handleSort} inputProps={{'data-testid': "sortSelect"}} variant="outlined" size="small" className={style.sort} SelectDisplayProps={style.sortDisplay}>
-                                <MenuItem value="default">Default</MenuItem>
-                                <MenuItem hidden={keywords === "" ? true : false} value="relevance"> Relevance</MenuItem>
-                                <MenuItem value="a-to-z">A-To-Z</MenuItem>
-                                <MenuItem value="ratings">Ratings</MenuItem>
-                            </Select>
-                        </FormControl>
+                    <Grid item xs={12}>
+                        <Autocomplete
+                            id="searchBar"
+                            freeSolo
+                            options={autoComplete.map((option) => option.name)}
+                            renderInput={(params) => (
+                                <TextField {...params} id="searchBar" label="Search Restaurants" onChange={handleSearchBarChange} margin="normal" variant="outlined" placeholder="Search Restaurants" className={style.search} />
+                            )}
+                        />
+                            
                     </Grid>
                 </Grid>
                 <Grid item>
