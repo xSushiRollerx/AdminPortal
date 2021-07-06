@@ -1,11 +1,9 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
-import Select from '@material-ui/core/Select';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import SearchFilter from '../components/RestaurantSearch/SearchFilter';
 import RestaurantTable from '../components/RestaurantSearch/RestaurantTable';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -47,133 +45,29 @@ const useStyles = makeStyles((theme) => ({
     backdrop: {
         zIndex: theme.zIndex.drawer + 1,
         color: '#fff',
+    },
+    p: {
+        margin: 0,
+        fontSize: 12
     }
 
 }));
 
 export default function RestaurantSearch(props) {
     const style = useStyles();
-    const [sort, setSort] = useState('default');
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
     const [rows, setRows] = useState([]);
     const [status, setStatus] = useState(0);
     const [keywords, setKeywords] = useState("");
     const [address, updateAddress] = useState({});
-    const [state, setState] = useState({
-        cheap: false,
-        mid: false,
-        fine: false,
-    });
-    const [inactive, setInactive] = useState(false);
-    const [ratings, setRatings] = useState(0);
+    const [inActive, setInactive] = useState(0);
     const [autoComplete, setAutoComplete] = useState([]);
     
-    //for other parts of app to use so they don't have to convert booleans string. prob should have been function;
-    const [priceCategories, setPriceCategories] = useState("1, 2, 3, 4");
 
-    const { cheap, mid, fine, high } = state;
-    const filter = async (checkbox) => {
-        console.log(checkbox)
-        let cheapHolder = cheap;
-        let midHolder = mid;
-        let fineHolder = fine;
-        let highHolder = high;
-        let query = "";
-
-        if (checkbox === "cheap") {
-            cheapHolder = !cheap;
-        } else if (checkbox === "mid") {
-            midHolder = !mid;
-        } else if (checkbox === "fine") {
-            fineHolder = !fine;
-        } else if (checkbox === "high") {
-            highHolder = !high;
-        }
-
-        if (cheapHolder) {
-            query += ", 1"
-        }
-
-        if (midHolder) {
-            query += ", 2"
-        }
-
-        if (fineHolder) {
-            query += ", 3"
-        }
-
-        if (highHolder) {
-            query += ", 4"
-        }
-
-        if (query === "") {
-            query = ", 1, 2, 3, 4"
-        }
-
-        try {
-            let res = await RestaurantService.getAllRestaurants(0, pageSize, query.substring(2), ratings, sort, keywords);
-            setStatus(res.status);
-            console.log(res);
-            setRows(res.data);
-        } catch (error) {
-            setStatus(500);
-
-        }
-
-        setPage(0);
-        setPriceCategories(query.substring(2));
-    }
-    const handlePrices = (event) => {
-        filter(event.target.name);
-        setState({ ...state, [event.target.name]: event.target.checked });
-    
-    };
-    const clearPrices = async () => {
-        try {
-            let res = await RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", ratings, sort, keywords);
-            setStatus(res.status);
-            console.log(res);
-            setRows(res.data);
-        } catch (error) {
-            setStatus(500);
-        }
-
-        setPage(0);
-        setPriceCategories("1, 2, 3, 4");
-        setState({
-            cheap: false,
-            mid: false,
-            fine: false,
-        });
-    }
-    const handleRatingsChange = async (event) => {
-        console.log(event.target.value);
-        try {
-            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, event.target.value, sort, keywords);
-            setStatus(res.status);
-            console.log(res);
-            setRows(res.data);
-        } catch (error) {
-            setStatus(500);
-        }
-        setRatings(event.target.value);
-    }
-    const handleSort = async (event) => {
-        console.log("Handle Sort: " + event.target.value);
-        try {
-            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, ratings, event.target.value, keywords);
-            setRows(res.data);
-            setStatus(res.status);
-        } catch (error) {
-            setStatus(500);
-        }
-        setPage(0);
-        setSort(event.target.value);
-    };
     const handleChangePage = async (newPage) => {
         try {
-            let res = await RestaurantService.getAllRestaurants(newPage, pageSize, priceCategories, ratings, sort, keywords);
+            let res = await RestaurantService.getAllRestaurants(newPage, pageSize, inActive, keywords);
             setStatus(res.status);
             console.log(res);
             setRows(res.data);
@@ -184,7 +78,7 @@ export default function RestaurantSearch(props) {
     };
     const handleChangeRowsPerPage = async (event) => {
         try {
-            let res = await RestaurantService.getAllRestaurants(0, event.target.value, priceCategories, ratings, sort, keywords);
+            let res = await RestaurantService.getAllRestaurants(0, event.target.value, inActive, keywords);
             setStatus(res.status);
             setRows(res.data);
         } catch (error) {
@@ -205,19 +99,19 @@ export default function RestaurantSearch(props) {
     }
     const handleInactiveChange = async () => {
         try {
-            let res = await RestaurantService.getAllInactiveRestaurants(0, pageSize, priceCategories, ratings, sort, keywords);
+            let res = await RestaurantService.getAllInactiveRestaurants(0, pageSize, inActive === 1 ? 0 : 1, keywords);
             setStatus(res.status);
             setRows(res.data);
         } catch {
             setStatus(500)
         }
-        setInactive(!inactive);
+        setInactive(inActive === 1 ? 0 : 1);
         setPage(0);
     }
     const handleSearchBarChange = async (event) => {
         try {
             console.log("handlesearchhappening")
-            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, ratings, sort, event.target.value);
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, inActive, event.target.value);
             setAutoComplete(res.data);
         } catch {
             setAutoComplete([{name: 'Something Went Wrong'}]);
@@ -225,16 +119,18 @@ export default function RestaurantSearch(props) {
     }
     const clearInactive = async () => {
         try {
-            let res = await RestaurantService.getAllRestaurants(0, pageSize, priceCategories, ratings, sort, keywords);
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, 1, keywords);
+            setStatus(res.status);
+            setRows(res.data);
         } catch {
             setStatus(500)
         }
-        setInactive(false);
+        setInactive(1);
         setPage(0);
     }
     useEffect(async () => {
         try {
-            let res = await RestaurantService.getAllRestaurants(0, 10, "1, 2, 3, 4", 0, "default", "");
+            let res = await RestaurantService.getAllRestaurants(0, 10, 1, "");
             setStatus(res.status);
             setRows(res.data);
         } catch (error) {
@@ -249,7 +145,7 @@ export default function RestaurantSearch(props) {
                 event.preventDefault();
                 console.log(document.getElementById("searchBar").value);
                 try {
-                    let res = await RestaurantService.getAllRestaurants(0, pageSize, "1, 2, 3, 4", 0, "relevance", (document.getElementById("searchBar") !== null ? document.getElementById("searchBar").value : ""))
+                    let res = await RestaurantService.getAllRestaurants(0, pageSize, 1, (document.getElementById("searchBar") !== null ? document.getElementById("searchBar").value : ""))
                     setStatus(res.status);
                     console.log(res);
                     setRows(res.data);
@@ -258,12 +154,6 @@ export default function RestaurantSearch(props) {
                 }
                 setKeywords(document.getElementById("searchBar").value);
                 setPage(0);
-                setSort("relevance");
-                setState({
-                    cheap: false,
-                    mid: false,
-                    fine: false,
-                });
                 document.getElementById("clearRatings").click();
             }
         })
@@ -289,7 +179,20 @@ export default function RestaurantSearch(props) {
                         <Autocomplete
                             id="searchBar"
                             freeSolo
-                            options={autoComplete.map((option) => option.name)}
+                            loadingText="Loading . . . "
+                            options={autoComplete}
+                            getOptionLabel={(option) => option.name}
+                            renderOption={(option) => (
+                                <Button disableRipple onClick={() => (props.history.push('/restaurant/' + option.id))} >
+                                <Grid direction="column" alignItems="stretch" justify="flex-start" onClick={() => props.history.push('/restaurant/' + option.id)}>
+                                    
+                                        <h6><b>{option.name}</b></h6>
+                                        <p className={style.p}>{option.id}</p>
+                                    
+                                    </Grid>
+                                </Button>
+                               
+                                )}
                             renderInput={(params) => (
                                 <TextField {...params} id="searchBar" label="Search Restaurants" onChange={handleSearchBarChange} margin="normal" variant="outlined" placeholder="Search Restaurants" className={style.search} />
                             )}
@@ -331,9 +234,9 @@ export default function RestaurantSearch(props) {
                 <Grid item xs={12} >
                     <Grid direction="row" container xs={12} spacing={0}>
                         <Grid className={style.filter} item xs={3}>
-                            <SearchFilter mid={mid} cheap={cheap} fine={fine} high={high} ratings={ratings} handleChange={handlePrices}
-                                handleRatings={handleRatingsChange} clearPrices={clearPrices} address={address} addressChange={handleAddressChange}
-                                inactive={inactive} showInactive={handleInactiveChange} clearInactive={clearInactive}
+                            <SearchFilter 
+                                 address={address} addressChange={handleAddressChange}
+                                inactive={inActive} showInactive={handleInactiveChange} clearInactive={clearInactive}
                             />
                         </Grid>
                         <Grid item xs={9}>
