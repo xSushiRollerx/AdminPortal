@@ -104,7 +104,7 @@ export default function RestaurantSearch(props) {
             setStatus(res.status);
             setRows(res.data);
         } catch {
-            setStatus(500)
+            setStatus(500);
         }
         setInactive(inActive === 1 ? 0 : 1);
         setPage(0);
@@ -183,14 +183,12 @@ export default function RestaurantSearch(props) {
                             options={autoComplete}
                             getOptionLabel={(option) => option.name}
                             renderOption={(option) => (
-                                <Button disableRipple onClick={() => (props.history.push('/restaurant/' + option.id))} >
                                 <Grid direction="column" alignItems="stretch" justify="flex-start" onClick={() => props.history.push('/restaurant/' + option.id)}>
                                     
-                                        <h6><b>{option.name}</b></h6>
+                                    <h6><b><a href={'/restaurant/' + option.id}>{option.name}</a></b></h6>
                                         <p className={style.p}>{option.id}</p>
                                     
                                     </Grid>
-                                </Button>
                                
                                 )}
                             renderInput={(params) => (
