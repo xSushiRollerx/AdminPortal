@@ -99,7 +99,8 @@ export default function RestaurantSearch(props) {
     }
     const handleInactiveChange = async () => {
         try {
-            let res = await RestaurantService.getAllInactiveRestaurants(0, pageSize, inActive === 1 ? 0 : 1, keywords);
+            let res = await RestaurantService.getAllRestaurants(0, pageSize, inActive === 1 ? 0 : 1, keywords);
+            console.log(res);
             setStatus(res.status);
             setRows(res.data);
         } catch {
@@ -169,7 +170,6 @@ export default function RestaurantSearch(props) {
          </div>
         );
     }
-    console.log(autoComplete);
     return (
         <Grid container direction="column" inputProps={{ 'data-testid': 'SearchPage' }}>
             
