@@ -192,7 +192,7 @@ export default function RestaurantSearch(props) {
                                
                                 )}
                             renderInput={(params) => (
-                                <TextField {...params} id="searchBar" label="Search Restaurants" onChange={handleSearchBarChange} margin="normal" variant="outlined" placeholder="Search Restaurants" className={style.search} />
+                                <TextField {...params} id="searchBar" inputProps={{ 'data-testid': 'searchBar' }} label="Search Restaurants" onChange={handleSearchBarChange} margin="normal" variant="outlined" placeholder="Search Restaurants" className={style.search} />
                             )}
                         />
                             
