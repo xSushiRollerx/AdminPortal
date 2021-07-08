@@ -155,7 +155,6 @@ export default function RestaurantSearch(props) {
                 }
                 setKeywords(document.getElementById("searchBar").value);
                 setPage(0);
-                document.getElementById("clearRatings").click();
             }
         })
     }, [])

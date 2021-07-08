@@ -115,7 +115,7 @@ it("Use Effect Runs On Load", async () => {
     
 });
 
-fit("Search Creates API Call", async () => {
+it("Search Creates API Call", async () => {
 
     let calls = mockAxios.get.mockResolvedValue({
         data: result,
@@ -138,7 +138,7 @@ fit("Search Creates API Call", async () => {
     });
 
     //Third call caused by clear ratings function
-    expect(calls.mock.calls.length).toBe(3);
+    expect(calls.mock.calls.length).toBe(4);
     
 });
 
@@ -203,6 +203,28 @@ it("Number of Items Per Page API Calls", async () => {
     });
 
    expect(calls.mock.calls.length).toBe(2);
+
+
+});
+
+it("Inactive Checked API call", async () => {
+
+    let calls = mockAxios.get.mockResolvedValue({
+        data: result,
+        status: 200
+    });
+
+
+    let dom;
+    await act(async () => {
+        dom = render(<RestaurantSearch />, container);
+    });
+
+    await act(async () => {
+        fireEvent.click(dom.getByTestId('inactiveBox'), { target: { checked: true } });
+    });
+
+    expect(calls.mock.calls.length).toBe(2);
 
 
 });
