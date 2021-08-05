@@ -81,12 +81,20 @@ const states = [
 
 export default function RestaurantForm(props) {
     const style = useStyles();
-    const [currentStep, setCurrentStep] = useState(0);
     const steps = ["Label 1", "Label 2", "Label 3"];
     const stateProps = {
         options: states,
         getOptionLabel: (state) => state.code,
     };
+
+    const [currentStep, setCurrentStep] = useState(0);
+    const [name, setName] = useState(null);
+    const [street, setStreet] = useState(null);
+    const [state, setState] = useState(null);
+    const [city, setCity] = useState(null);
+    const [zipCode, setZipCode] = useState(null);
+    const [tags, setTags] = useState([]);
+    const [price, setPrice] = useState(0);
 
     return (
         <Paper className={style.paper}>
@@ -104,28 +112,43 @@ export default function RestaurantForm(props) {
                     <h5>Restaurant Name</h5>
                 </Grid>
                 <Grid item>
-                    <TextField id="outlined-basic" label="Restaurant Name" fullWidth/>
+                    <TextField id="outlined-basic" label="Restaurant Name" onChange={(event) => {
+                            setName(event.target.value);
+                            console.log(name);
+                        }
+                    } fullWidth/>
                 </Grid>
                 <Grid item>
                     <h5>Location</h5>
-                    <TextField id="outlined-basic" label="Street" fullWidth/>
+                    <TextField id="outlined-basic" label="Street" onChange={(event) => {
+                            setStreet(event.target.value);
+                            console.log(street);
+                        }
+                    } fullWidth/>
                     <Grid container direction="row" justify="center" alignItems="center">
                         <Grid item xs={6}>
-                            <TextField className={style.field} label="City"  size="small"/>
+                            <TextField className={style.field} label="City" size="small" onChange={(event) => {
+                            setCity(event.target.value);
+                            console.log(city);
+                        }}/>
                         </Grid>
                         <Grid item xs={3}>
                                 <Autocomplete
-                                    {...stateProps}
+                                    options={states.map(value => value.code)}
                                     autoSelect
                                     size="small" 
                                     name="state"
+                                    onChange={(event, value) => {setState(value); console.log(value) }}
                                     renderInput={(params) => <TextField  className={style.field} {...params}  label="State" margin="normal"/>}
                                 />
                         </Grid>
                         <Grid item xs={3}>
-                                <TextField label="Zip Code" className={style.field} size="small" name="zipCode"  
+                                <TextField label="Zip Code" value={zipCode} className={style.field} size="small" name="zipCode"  
                                     onChange={(event) => {
                                         const regex = /^([0-9]){0,5}$/i;
+                                        if (event.target.value === '' || regex.test(event.target.value)) {
+                                            setZipCode( event.target.value );
+                                        }
                                     }}
                                 />
                         </Grid>
@@ -135,7 +158,10 @@ export default function RestaurantForm(props) {
                     <h5>Price Range</h5>
                 </Grid>
                 <Grid item>
-                    <RadioGroup>
+                    <RadioGroup onChange={(event) => {
+                            setPrice(event.target.value);
+                            console.log(price);
+                        }}>
                         <FormControlLabel value="1" control={<Radio />} label="Cheap Eat" />
                         <FormControlLabel value="2" control={<Radio />} label="Mid Range" />
                         <FormControlLabel value="3" control={<Radio />} label="Fine Dining" />
@@ -150,11 +176,12 @@ export default function RestaurantForm(props) {
                         multiple
                         options={[]}
                         freeSolo
-                        renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                            <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-                        ))
-                        }
+                        renderTags={(value, getTagProps) => {
+                            setTags(value);
+                            return value.map((option, index) => (
+                                <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                            ))
+                        }}
                         renderInput={(params) => (
                         <TextField {...params}  placeholder="Tags" />
                         )}
