@@ -3,6 +3,14 @@ import axios from "axios";
 
 const RESTAURANT_SERVICE_BASE_URL = 'http://localhost:8040';
 
+const jwtToken = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5OCIsImV4cCI6MTYyNTYyNTQ3MSwiaWF0IjoxNjI1MjY1NDcxfQ.gzD-4qXhqFrz8goUy5Mr-3Y_AG7On47Aa_mWWKnpUCY'
+const config = {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': jwtToken
+    }
+};
+
 const RestaurantService = {
 
     getRestaurant: async function (id) {
@@ -12,13 +20,6 @@ const RestaurantService = {
     getAllRestaurants: async function (page, pageSize, inactive, keyword) {
         //add header to gain access to autocomplete function
         //const jwtToken = 'Bearer ' + localStorage.getItem('jwt');
-        const jwtToken = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5OCIsImV4cCI6MTYyNTYyNTQ3MSwiaWF0IjoxNjI1MjY1NDcxfQ.gzD-4qXhqFrz8goUy5Mr-3Y_AG7On47Aa_mWWKnpUCY'
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': jwtToken
-            }
-        };
 
         try {
             if (keyword.trim() === "") {
@@ -31,6 +32,15 @@ const RestaurantService = {
             }
         } catch (err) {
 
+            return { data: "Error", status: 500 };
+        }
+    },
+
+    addRestaurant: async function(restaurant) {
+        try {
+            let response = await axios.post(RESTAURANT_SERVICE_BASE_URL + "/restaurant", restaurant, config);
+            return response;
+        } catch (err) {
             return { data: "Error", status: 500 };
         }
     }
