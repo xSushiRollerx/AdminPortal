@@ -1,48 +1,49 @@
-import logo from './logo.svg';
+import HeaderComponent from './components/Navigation/HeaderComponent';
+import { makeStyles } from '@material-ui/core/styles';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import clsx from 'clsx';
 import './App.css';
-import HeaderComponent from "./components/HeaderComponent";
-import FooterComponent from "./components/FooterComponent";
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import UpdateRestaurant from "./components/UpdateRestaurant";
-import RestaurantsComponents from "./components/RestaurantsComponents";
-import CreateRestaurantComponent from "./components/CreateRestaurantComponent";
-import ViewRestaurantComponent from "./components/ViewRestaurantComponent";
-import FoodComponents from "./components/FoodComponents";
-import CreateFoodComponent from "./components/CreateFoodComponent";
-import ViewFoodComponent from "./components/ViewFoodComponent";
-import DataTable from "./reactpagination/RestaurantDataTable.js";
-import Login from "./components/AccountComponents/Login";
-import UserInfo from "./components/AccountComponents/UserInfo";
-import UpdateAccount from "./components/AccountComponents/UpdateAccount";
-import Account from "./components/AccountComponents/Account"
+import RestaurantSearch from './pages/RestaurantSearch';
+import RestaurantProfile from './pages/RestaurantProfile';
+
+const useStyles = makeStyles((theme) => ({
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        marginLeft: 100,
+        marginRight: 100,
+    },
+    drawerHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(0, 1),
+        // necessary for content to be below app bar
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-end',
+    },
+}));
 
 function App() {
+    const classes = useStyles();
     return (
         <div>
             
             <Router>
-                    <HeaderComponent/>
-                    <div className="container">
+                <div className="container">
+                    <div className={clsx(classes.content)}>
+                        <div className={classes.drawerHeader} />
+                        <HeaderComponent />
                         <Switch>
-                            <Route path = "/login" exact component = {Login}></Route>
-                            <Route path = "/profile" exact component = {UserInfo}></Route>
-                            <Route path = "/update" exact component = {UpdateAccount}></Route>
-                            <Route path = "/" exact component = {DataTable}></Route>
-                            {/*<Route path = "/" exact component = {RestaurantsComponents}></Route>*/}
-                            <Route path = "/restaurant" component = {RestaurantsComponents}></Route>
-                            {/*Step 1 To Use one Component for Add and Update*/}
-                            <Route path = "/add-restaurant/:id" component = {CreateRestaurantComponent}></Route>
-                            <Route path = "/view-restaurant/:id" component = {ViewRestaurantComponent}></Route>
-                            {/*<Route path = "/update-restaurant/:id" component = {UpdateRestaurant}></Route>*/}
-                            {/*<Route path = "/" exact component = {FoodComponents}></Route>*/}
-                            <Route path = "/food" component = {FoodComponents}></Route>
-                            <Route path = "/add-food/:id" component = {CreateFoodComponent}></Route>
-                            <Route path = "/view-food/:id" component = {ViewFoodComponent}></Route>
-                            <Route path = "/account" component = {Account}></Route>
+                            <Route path="/restaurants" exact component={RestaurantSearch}></Route>
+                            <Route path="/restaurant/:id" exact component={RestaurantProfile}></Route>
                         </Switch>
+                        </div>
                     </div>
             </Router>
-            <FooterComponent/>
         </div>
 
 
