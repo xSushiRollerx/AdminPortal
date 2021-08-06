@@ -1,7 +1,7 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import { Grid } from '@material-ui/core';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
@@ -13,11 +13,24 @@ import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import RestaurantService from './../../services/RestaurantService';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Card from '@material-ui/core/Card';
 
 
 
 
 const useStyles = makeStyles((theme) => ({
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        
+      },
+    card: {
+        padding: 30,
+        borderWidth: 0
+    },
     field: {
         marginBottom: 8,
         width: "100%"
@@ -81,6 +94,7 @@ const states = [
 ]
 
 export default function RestaurantForm(props) {
+    
     const style = useStyles();
     const stateProps = {
         options: states,
@@ -103,7 +117,11 @@ export default function RestaurantForm(props) {
         name: { error: false, text: '' },
         price: { error: false, text: '' }
     });
+    const [open, setOpen] = useState(true);
 
+    const handleClose = () => {
+        setOpen(false);
+    };
     const valid = () => {
         let nameError = { error: false, text: ''};
         let streetError = { error: false, text: ''};
@@ -178,113 +196,132 @@ export default function RestaurantForm(props) {
                 history.push("/restaurant/" + response.data.id);
             }
         } catch (error) {
+            setOpen(true);
             console.log("haha");
         }
     }
     return (
-        <Paper className={style.paper}>
-            <Grid container justify="center" alignItems="stretch" direction="column" spacing={3}>
-                <Grid item>
-                    <h5>Restaurant Name</h5>
-                </Grid>
-                <Grid item>
-                    <TextField error={errors.name.error} id="outlined-basic" label="Restaurant Name" onChange={(event) => {
-                            setName(event.target.value);
-                        }
-                    } fullWidth/>
-                </Grid>
-                <Grid item>
-                            <FormHelperText error={true}>{errors.name.text}</FormHelperText>
-                        </Grid>
-                <Grid item>
-                    <h5>Location</h5>
-                    <TextField error={errors.street.error} id="outlined-basic" label="Street" onChange={(event) => {
-                            setStreet(event.target.value);
-                        }
-                    } fullWidth/>
-                    <FormHelperText error={true}>{errors.street.text}</FormHelperText>
-                    <Grid container direction="row" justify="center" alignItems="flex-end">
-                        <Grid item xs={6}>
-                            <TextField error={errors.city.error} className={style.field} label="City" size="small" onChange={(event) => {
-                            setCity(event.target.value);
-                        }}/>
-                        </Grid>
-                        <Grid item xs={3}>
-                                <Autocomplete
-                                    options={states.map(value => value.code)}
-                                    autoSelect
-                                    size="small" 
-                                    name="state"
-                                    onChange={(event, value) => {setState(value);}}
-                                    renderInput={(params) => <TextField  error={errors.state.error} {...params}  label="State" margin="normal"/>}
-                                />
-                        </Grid>
-                        <Grid item xs={3}>
-                                <TextField label="Zip Code" error={errors.zipCode.error} value={zipCode} className={style.field} size="small" name="zipCode"  
-                                    onChange={(event) => {
-                                        const regex = /^([0-9]){0,5}$/i;
-                                        if (event.target.value === '' || regex.test(event.target.value)) {
-                                            setZipCode( event.target.value );
-                                        }
-                                    }}
-                                />
-                        </Grid>
+        <div>
+            <Paper className={style.paper}>
+                <Grid container justify="center" alignItems="stretch" direction="column" spacing={3}>
+                    <Grid item>
+                        <h5>Restaurant Name</h5>
                     </Grid>
-                    <Grid container direction="row" justify="space-between" alignItems="flex-start">
-                        <Grid item xs={6}>
-                            <FormHelperText error={true}>{errors.city.text}</FormHelperText>
+                    <Grid item>
+                        <TextField error={errors.name.error} id="outlined-basic" label="Restaurant Name" onChange={(event) => {
+                                setName(event.target.value);
+                            }
+                        } fullWidth/>
+                    </Grid>
+                    <Grid item>
+                                <FormHelperText error={true}>{errors.name.text}</FormHelperText>
+                            </Grid>
+                    <Grid item>
+                        <h5>Location</h5>
+                        <TextField error={errors.street.error} id="outlined-basic" label="Street" onChange={(event) => {
+                                setStreet(event.target.value);
+                            }
+                        } fullWidth/>
+                        <FormHelperText error={true}>{errors.street.text}</FormHelperText>
+                        <Grid container direction="row" justify="center" alignItems="flex-end">
+                            <Grid item xs={6}>
+                                <TextField error={errors.city.error} className={style.field} label="City" size="small" onChange={(event) => {
+                                setCity(event.target.value);
+                            }}/>
+                            </Grid>
+                            <Grid item xs={3}>
+                                    <Autocomplete
+                                        options={states.map(value => value.code)}
+                                        autoSelect
+                                        size="small" 
+                                        name="state"
+                                        onChange={(event, value) => {setState(value);}}
+                                        renderInput={(params) => <TextField  error={errors.state.error} {...params}  label="State" margin="normal"/>}
+                                    />
+                            </Grid>
+                            <Grid item xs={3}>
+                                    <TextField label="Zip Code" error={errors.zipCode.error} value={zipCode} className={style.field} size="small" name="zipCode"  
+                                        onChange={(event) => {
+                                            const regex = /^([0-9]){0,5}$/i;
+                                            if (event.target.value === '' || regex.test(event.target.value)) {
+                                                setZipCode( event.target.value );
+                                            }
+                                        }}
+                                    />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={3}>
-                            <FormHelperText error={true}>{errors.state.text}</FormHelperText>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <FormHelperText error={true}>{errors.zipCode.text}</FormHelperText>
-                        </Grid>
+                        <Grid container direction="row" justify="space-between" alignItems="flex-start">
+                            <Grid item xs={6}>
+                                <FormHelperText error={true}>{errors.city.text}</FormHelperText>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <FormHelperText error={true}>{errors.state.text}</FormHelperText>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <FormHelperText error={true}>{errors.zipCode.text}</FormHelperText>
+                            </Grid>
 
 
+                        </Grid>
+                    </Grid>
+                    <Grid item>
+                        <h5>Price Range</h5>
+                    </Grid>
+                    <Grid item>
+                        <RadioGroup onChange={(event) => {
+                                setPrice(event.target.value);
+                            }}>
+                            <FormControlLabel value="1" control={<Radio />} label="Cheap Eat" />
+                            <FormControlLabel value="2" control={<Radio />} label="Mid Range" />
+                            <FormControlLabel value="3" control={<Radio />} label="Fine Dining" />
+                            <FormControlLabel value="4" control={<Radio />} label="High End Luxury" />
+                        </RadioGroup>
+                    </Grid>
+                    <Grid item >
+                        <FormHelperText error={true}>{errors.price.text}</FormHelperText>
+                    </Grid>
+                    <Grid item>
+                        <h5>Tags</h5>
+                    </Grid>
+                    <Grid item>
+                        <Autocomplete
+                            multiple
+                            options={[]}
+                            freeSolo
+                            renderTags={(value, getTagProps) => {
+                                setTags(value);
+                                return value.map((option, index) => (
+                                    <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                                ))
+                            }}
+                            renderInput={(params) => (
+                            <TextField {...params}  placeholder="Tags" />
+                            )}
+                        />
+                    </Grid>
+                    <Grid item alignItems="center" justify="center">
+                        <Grid container direction="row" justify="center" alignItems="stretch">
+                            <Button onClick={submit}variant="outlined">Submit</Button>
+                        </Grid>
                     </Grid>
                 </Grid>
-                <Grid item>
-                    <h5>Price Range</h5>
-                </Grid>
-                <Grid item>
-                    <RadioGroup onChange={(event) => {
-                            setPrice(event.target.value);
-                        }}>
-                        <FormControlLabel value="1" control={<Radio />} label="Cheap Eat" />
-                        <FormControlLabel value="2" control={<Radio />} label="Mid Range" />
-                        <FormControlLabel value="3" control={<Radio />} label="Fine Dining" />
-                        <FormControlLabel value="4" control={<Radio />} label="High End Luxury" />
-                    </RadioGroup>
-                </Grid>
-                <Grid item >
-                    <FormHelperText error={true}>{errors.price.text}</FormHelperText>
-                </Grid>
-                <Grid item>
-                    <h5>Tags</h5>
-                </Grid>
-                <Grid item>
-                    <Autocomplete
-                        multiple
-                        options={[]}
-                        freeSolo
-                        renderTags={(value, getTagProps) => {
-                            setTags(value);
-                            return value.map((option, index) => (
-                                <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-                            ))
-                        }}
-                        renderInput={(params) => (
-                        <TextField {...params}  placeholder="Tags" />
-                        )}
-                    />
-                </Grid>
-                <Grid item alignItems="center" justify="center">
-                    <Grid container direction="row" justify="center" alignItems="stretch">
-                        <Button onClick={submit}variant="outlined">Submit</Button>
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Paper>
+            </Paper>
+            <Modal
+            aria-labelledby="spring-modal-title"
+            aria-describedby="spring-modal-description"
+            className={style.modal}
+            open={open}
+            onClose={handleClose}
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+            timeout: 500,
+            }}
+            >
+                <Card className={style.card}>
+                    <h2 id="spring-modal-title">Error</h2>
+                    <p id="spring-modal-description">Something Went Wrong</p>
+                </Card>
+            </Modal>
+        </div>
     );
 }
