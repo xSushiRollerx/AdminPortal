@@ -14,6 +14,7 @@ import Radio from '@material-ui/core/Radio';
 import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import RestaurantService from './../../services/RestaurantService';
 
 
 
@@ -102,7 +103,8 @@ export default function RestaurantForm(props) {
         city: { error: false, text: '' },
         state: { error: false, text: '' },
         zipCode: { error: false, text: '' },
-        name: { error: false, text: '' }
+        name: { error: false, text: '' },
+        price: { error: false, text: '' }
     });
 
     const valid = () => {
@@ -142,7 +144,6 @@ export default function RestaurantForm(props) {
             zipCodeError.text = "This zip code is incomplete. It does not have five digits."
         }
 
-        console.log(price);
         if (price === "null" | price === undefined | price === 0) {
             priceError.error = true;
             priceError.text = "Please select a price range"
@@ -158,8 +159,7 @@ export default function RestaurantForm(props) {
             tags: tagsError
         });
 
-        if (nameError || streetError || cityError || stateError || zipCodeError || priceError || tagsError) {
-            console.log("invalid");
+        if (nameError | streetError | cityError | stateError | zipCodeError | priceError) {
             return false;
         } else {
             console.log("valid");
@@ -167,9 +167,16 @@ export default function RestaurantForm(props) {
         };
     };
 
-    const submit = () => {
+    const submit = async () => {
         console.log()
         if (!valid()) return; 
+
+        try {
+            let response  = await RestaurantService.addRestaurant(name, street, city, state, parseInt(zipCode), tags.toString(), parseInt(price));
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+        }
     }
     return (
         <Paper className={style.paper}>
@@ -203,7 +210,8 @@ export default function RestaurantForm(props) {
                             console.log(street);
                         }
                     } fullWidth/>
-                    <Grid container direction="row" justify="center" alignItems="center">
+                    <FormHelperText error={true}>{errors.street.text}</FormHelperText>
+                    <Grid container direction="row" justify="center" alignItems="flex-end">
                         <Grid item xs={6}>
                             <TextField error={errors.city.error} className={style.field} label="City" size="small" onChange={(event) => {
                             setCity(event.target.value);
@@ -217,7 +225,7 @@ export default function RestaurantForm(props) {
                                     size="small" 
                                     name="state"
                                     onChange={(event, value) => {setState(value); console.log(value) }}
-                                    renderInput={(params) => <TextField  error={errors.state.error} className={style.field} {...params}  label="State" margin="normal"/>}
+                                    renderInput={(params) => <TextField  error={errors.state.error} {...params}  label="State" margin="normal"/>}
                                 />
                         </Grid>
                         <Grid item xs={3}>

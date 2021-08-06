@@ -3,7 +3,8 @@ import axios from "axios";
 
 const RESTAURANT_SERVICE_BASE_URL = 'http://localhost:8040';
 
-const jwtToken = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5OCIsImV4cCI6MTYyNTYyNTQ3MSwiaWF0IjoxNjI1MjY1NDcxfQ.gzD-4qXhqFrz8goUy5Mr-3Y_AG7On47Aa_mWWKnpUCY'
+const jwtToken = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI5OCIsImV4cCI6MTYyODYyMjY0MiwiaWF0IjoxNjI4MjYyNjQyfQ.Ou4rzYMHn5gIckNqqs1Y_EbPIXShTVYWK2tq2MPsIAU';
+
 const config = {
     headers: {
         'Content-Type': 'application/json',
@@ -36,8 +37,20 @@ const RestaurantService = {
         }
     },
 
-    addRestaurant: async function(restaurant) {
+    addRestaurant: async function(name, street, city, state, zipCode, tags, price) {
         try {
+
+            let restaurant = {
+                city: city,
+                name: name,
+                priceCategory: price,
+                state: state,
+                streetAddress: street,
+                tags: tags !== null && tags.trim() === '' ? null : tags, 
+                zipCode: zipCode
+
+            };
+            console.log(restaurant);
             let response = await axios.post(RESTAURANT_SERVICE_BASE_URL + "/restaurant", restaurant, config);
             return response;
         } catch (err) {
