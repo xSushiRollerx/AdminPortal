@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import './App.css';
 import RestaurantSearch from './pages/RestaurantSearch';
 import RestaurantProfile from './pages/RestaurantProfile';
-import RestaurantForm from './components/RestaurantAdd/RestaurantForm';
+import RestaurantForm from './pages/RestaurantForm';
 
 const useStyles = makeStyles((theme) => ({
     content: {

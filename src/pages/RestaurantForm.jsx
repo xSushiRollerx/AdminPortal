@@ -12,7 +12,7 @@ import Radio from '@material-ui/core/Radio';
 import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import RestaurantService from './../../services/RestaurantService';
+import RestaurantService from '../services/RestaurantService';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Card from '@material-ui/core/Card';
@@ -117,7 +117,7 @@ export default function RestaurantForm(props) {
         name: { error: false, text: '' },
         price: { error: false, text: '' }
     });
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
     const handleClose = () => {
         setOpen(false);
