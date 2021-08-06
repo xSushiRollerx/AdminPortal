@@ -2,9 +2,7 @@ import React from 'react';
 import Paper from '@material-ui/core/Paper';
 import { Grid } from '@material-ui/core';
 import { useState, useEffect } from 'react';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
+import { useHistory } from "react-router-dom";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
@@ -84,13 +82,12 @@ const states = [
 
 export default function RestaurantForm(props) {
     const style = useStyles();
-    const steps = ["Label 1", "Label 2", "Label 3"];
     const stateProps = {
         options: states,
         getOptionLabel: (state) => state.code,
     };
 
-    const [currentStep, setCurrentStep] = useState(0);
+    const history = useHistory();
     const [name, setName] = useState('');
     const [street, setStreet] = useState('');
     const [state, setState] = useState('');
@@ -160,6 +157,7 @@ export default function RestaurantForm(props) {
         });
 
         if (nameError | streetError | cityError | stateError | zipCodeError | priceError) {
+            console.log("invalid")
             return false;
         } else {
             console.log("valid");
@@ -173,30 +171,25 @@ export default function RestaurantForm(props) {
 
         try {
             let response  = await RestaurantService.addRestaurant(name, street, city, state, parseInt(zipCode), tags.toString(), parseInt(price));
-            console.log(response);
+            
+            if (response.status === 201) {
+                console.log("got response");
+                console.log(response)
+                history.push("/restaurant/" + response.data.id);
+            }
         } catch (error) {
-            console.log(error);
+            console.log("haha");
         }
     }
     return (
         <Paper className={style.paper}>
             <Grid container justify="center" alignItems="stretch" direction="column" spacing={3}>
                 <Grid item>
-                    <Stepper activeStep={currentStep} alternativeLabel>
-                    {steps.map((label) => (
-                        <Step key={label}>
-                            <StepLabel>{label}</StepLabel>
-                        </Step>
-                    ))}
-                    </Stepper>
-                </Grid>
-                <Grid item>
                     <h5>Restaurant Name</h5>
                 </Grid>
                 <Grid item>
                     <TextField error={errors.name.error} id="outlined-basic" label="Restaurant Name" onChange={(event) => {
                             setName(event.target.value);
-                            console.log(name);
                         }
                     } fullWidth/>
                 </Grid>
@@ -207,7 +200,6 @@ export default function RestaurantForm(props) {
                     <h5>Location</h5>
                     <TextField error={errors.street.error} id="outlined-basic" label="Street" onChange={(event) => {
                             setStreet(event.target.value);
-                            console.log(street);
                         }
                     } fullWidth/>
                     <FormHelperText error={true}>{errors.street.text}</FormHelperText>
@@ -215,7 +207,6 @@ export default function RestaurantForm(props) {
                         <Grid item xs={6}>
                             <TextField error={errors.city.error} className={style.field} label="City" size="small" onChange={(event) => {
                             setCity(event.target.value);
-                            console.log(city);
                         }}/>
                         </Grid>
                         <Grid item xs={3}>
@@ -224,7 +215,7 @@ export default function RestaurantForm(props) {
                                     autoSelect
                                     size="small" 
                                     name="state"
-                                    onChange={(event, value) => {setState(value); console.log(value) }}
+                                    onChange={(event, value) => {setState(value);}}
                                     renderInput={(params) => <TextField  error={errors.state.error} {...params}  label="State" margin="normal"/>}
                                 />
                         </Grid>
@@ -259,7 +250,6 @@ export default function RestaurantForm(props) {
                 <Grid item>
                     <RadioGroup onChange={(event) => {
                             setPrice(event.target.value);
-                            console.log(price);
                         }}>
                         <FormControlLabel value="1" control={<Radio />} label="Cheap Eat" />
                         <FormControlLabel value="2" control={<Radio />} label="Mid Range" />

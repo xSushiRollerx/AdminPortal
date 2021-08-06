@@ -50,8 +50,8 @@ const RestaurantService = {
                 zipCode: zipCode
 
             };
-            console.log(restaurant);
-            let response = await axios.post(RESTAURANT_SERVICE_BASE_URL + "/restaurant", restaurant, config);
+            
+            let response = axios.post(RESTAURANT_SERVICE_BASE_URL + "/restaurant", restaurant, config);
             return response;
         } catch (err) {
             return { data: "Error", status: 500 };
