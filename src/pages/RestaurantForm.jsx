@@ -194,10 +194,11 @@ export default function RestaurantForm(props) {
                 console.log("got response");
                 console.log(response)
                 history.push("/restaurant/" + response.data.id);
+            } else {
+                setOpen(true);
             }
         } catch (error) {
             setOpen(true);
-            console.log("haha");
         }
     }
     return (
@@ -208,24 +209,24 @@ export default function RestaurantForm(props) {
                         <h5>Restaurant Name</h5>
                     </Grid>
                     <Grid item>
-                        <TextField error={errors.name.error} id="outlined-basic" label="Restaurant Name" onChange={(event) => {
+                        <TextField error={errors.name.error} inputProps={{ 'data-testid': 'name-field' }} id="outlined-basic" label="Restaurant Name" onChange={(event) => {
                                 setName(event.target.value);
                             }
                         } fullWidth/>
                     </Grid>
                     <Grid item>
-                                <FormHelperText error={true}>{errors.name.text}</FormHelperText>
+                                <FormHelperText inputProps data-testid='name-error-text' error={true}>{errors.name.text}</FormHelperText>
                             </Grid>
                     <Grid item>
                         <h5>Location</h5>
-                        <TextField error={errors.street.error} id="outlined-basic" label="Street" onChange={(event) => {
+                        <TextField error={errors.street.error} inputProps={{ 'data-testid': 'street-field' }} id="outlined-basic" label="Street" onChange={(event) => {
                                 setStreet(event.target.value);
                             }
                         } fullWidth/>
-                        <FormHelperText error={true}>{errors.street.text}</FormHelperText>
+                        <FormHelperText data-testid='street-error-text' error={true}>{errors.street.text}</FormHelperText>
                         <Grid container direction="row" justify="center" alignItems="flex-end">
                             <Grid item xs={6}>
-                                <TextField error={errors.city.error} className={style.field} label="City" size="small" onChange={(event) => {
+                                <TextField inputProps={{ 'data-testid': 'city-field' }} error={errors.city.error} className={style.field} label="City" size="small" onChange={(event) => {
                                 setCity(event.target.value);
                             }}/>
                             </Grid>
@@ -236,11 +237,12 @@ export default function RestaurantForm(props) {
                                         size="small" 
                                         name="state"
                                         onChange={(event, value) => {setState(value);}}
+                                        data-testid='state-field' 
                                         renderInput={(params) => <TextField  error={errors.state.error} {...params}  label="State" margin="normal"/>}
                                     />
                             </Grid>
                             <Grid item xs={3}>
-                                    <TextField label="Zip Code" error={errors.zipCode.error} value={zipCode} className={style.field} size="small" name="zipCode"  
+                                    <TextField inputProps={{ 'data-testid': 'zipCode-field' }} label="Zip Code" error={errors.zipCode.error} value={zipCode} className={style.field} size="small" name="zipCode"  
                                         onChange={(event) => {
                                             const regex = /^([0-9]){0,5}$/i;
                                             if (event.target.value === '' || regex.test(event.target.value)) {
@@ -252,13 +254,13 @@ export default function RestaurantForm(props) {
                         </Grid>
                         <Grid container direction="row" justify="space-between" alignItems="flex-start">
                             <Grid item xs={6}>
-                                <FormHelperText error={true}>{errors.city.text}</FormHelperText>
+                                <FormHelperText data-testid='city-error-text' error={true}>{errors.city.text}</FormHelperText>
                             </Grid>
                             <Grid item xs={3}>
-                                <FormHelperText error={true}>{errors.state.text}</FormHelperText>
+                                <FormHelperText data-testid='state-error-text' error={true}>{errors.state.text}</FormHelperText>
                             </Grid>
                             <Grid item xs={3}>
-                                <FormHelperText error={true}>{errors.zipCode.text}</FormHelperText>
+                                <FormHelperText data-testid='zipCode-error-text' error={true}>{errors.zipCode.text}</FormHelperText>
                             </Grid>
 
 
@@ -278,7 +280,7 @@ export default function RestaurantForm(props) {
                         </RadioGroup>
                     </Grid>
                     <Grid item >
-                        <FormHelperText error={true}>{errors.price.text}</FormHelperText>
+                        <FormHelperText data-testid='price-error-text' error={true}>{errors.price.text}</FormHelperText>
                     </Grid>
                     <Grid item>
                         <h5>Tags</h5>
@@ -295,13 +297,13 @@ export default function RestaurantForm(props) {
                                 ))
                             }}
                             renderInput={(params) => (
-                            <TextField {...params}  placeholder="Tags" />
+                            <TextField inputProps={{ 'data-testid': 'tags-field' }} {...params}  placeholder="Tags" />
                             )}
                         />
                     </Grid>
-                    <Grid item alignItems="center" justify="center">
+                    <Grid item justify="center">
                         <Grid container direction="row" justify="center" alignItems="stretch">
-                            <Button onClick={submit}variant="outlined">Submit</Button>
+                            <Button data-testid = 'submit-button' onClick={submit} variant="outlined">Submit</Button>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -316,6 +318,7 @@ export default function RestaurantForm(props) {
             BackdropProps={{
             timeout: 500,
             }}
+            data-testid ='error-modal'
             >
                 <Card className={style.card}>
                     <h2 id="spring-modal-title">Error</h2>
