@@ -3,7 +3,6 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import SearchFilter from '../components/RestaurantSearch/SearchFilter';
 import RestaurantTable from '../components/RestaurantSearch/RestaurantTable';
 import TablePagination from '@material-ui/core/TablePagination';
@@ -14,6 +13,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function RestaurantSearch(props) {
+    const history = useHistory();
     const style = useStyles();
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(10);
@@ -220,7 +221,7 @@ export default function RestaurantSearch(props) {
                         </Grid>
                         <Grid item xs={4}>
                             <Grid container direction="row" justify="flex-end">
-                                 <Button variant="contained" color="primary" disableElevation>
+                                 <Button onClick={() => {history.push("/restaurant")}}variant="contained" color="primary" disableElevation>
                                     Add Restaurant
                                 </Button>
                             </Grid>    

@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import './App.css';
 import RestaurantSearch from './pages/RestaurantSearch';
 import RestaurantProfile from './pages/RestaurantProfile';
+import RestaurantForm from './pages/RestaurantForm';
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -40,6 +41,7 @@ function App() {
                         <Switch>
                             <Route path="/restaurants" exact component={RestaurantSearch}></Route>
                             <Route path="/restaurant/:id" exact component={RestaurantProfile}></Route>
+                            <Route path="/restaurant/" exact component={RestaurantForm}></Route>
                         </Switch>
                         </div>
                     </div>
